@@ -1,14 +1,22 @@
 <div th:fragment="content">
     <h3>text from intro.html</h3>
+
+    <!--info messages-->
     <div ng-if="!connecting &amp;&amp; !connected">
         <span ng-click="startConnection()" class="btn btn-default">Connect!</span>
     </div>
-    <div ng-if="connecting">
+    <div ng-if="connectionError">
+        <div class="bg-danger text-danger">
+            <div>Connection to your local java server is down!</div>
+            <div>Please check your server and reload the page</div>
+        </div>
+    </div>
+    <div ng-if="connecting &amp;&amp; !connectionError">
         <span>Connecting..... please start the race</span>
     </div>
+
+    <!--main content-->
     <div ng-if="connected">
         <span>Connected!!!</span>
-
-
     </div>
 </div>

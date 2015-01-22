@@ -8,7 +8,7 @@ AppController = ($scope, $http, $interval) ->
     request.then () =>
       $scope.connecting = true
 
-      checkInterval = $interval(CheckConnectivity, 1000);
+      checkInterval = $interval(CheckConnectivity, 2000);
 
   CheckConnectivity = () =>
     request = $http.get '/checkConnection'
@@ -17,6 +17,10 @@ AppController = ($scope, $http, $interval) ->
       if ($scope.connected)
         $scope.connecting = false
         $interval.cancel checkInterval
+        #TODO start showing info
+    request.error () =>
+      $scope.connectionError = true
+      $interval.cancel checkInterval
 
 
 
