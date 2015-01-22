@@ -2,6 +2,8 @@ package com.ags.assetto.connector;
 
 import com.ags.assetto.connector.utils.OperationEnum;
 import com.ags.assetto.connector.utils.ReaderUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -17,6 +19,8 @@ import java.nio.ByteOrder;
 public class ACConnector implements Runnable {
 
     private String gameHost = "127.0.0.1";
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ACConnector.class);
 
     private DatagramSocket socket;
     private DatagramPacket packet;
@@ -58,39 +62,39 @@ public class ACConnector implements Runnable {
         try {
             ACConnector.HandshakeHandler var3 = new ACConnector.HandshakeHandler();
             var3.start();
-            System.out.println("Handshake start preparation ...");
+            LOGGER.debug("Handshake start preparation ...");
             sendHandshake(OperationEnum.HANDSHAKE);
-            System.out.println("Handshake start sent");
+            LOGGER.debug("Handshake start sent");
 
             while(var3.isAlive()) {
                 Thread.sleep(100L);
             }
 
             if(this.carName == null && this.driverName == null && this.trackName == null && this.trackConfig == null) {
-                System.out.println("Connection lost... retrying...");
+                LOGGER.warn("Connection lost... retrying...");
                 initHandshake();
             } else {
                 Updater var4 = new Updater();
                 var4.start();
-                System.out.println("Handshake connection confirmation preparation ...");
+                LOGGER.debug("Handshake connection confirmation preparation ...");
                 this.sendHandshake(OperationEnum.SUBSCRIBE_UPDATE);
-                System.out.println("Handshake connection confirmation sent");
+                LOGGER.debug("Handshake connection confirmation sent");
 
                 while(var4.isAlive()) {
                     Thread.sleep(1000L);
                 }
 
-                System.out.println("Handshake connection dismiss preparation ...");
+                LOGGER.debug("Handshake connection dismiss preparation ...");
                 this.sendHandshake(OperationEnum.DISMISS);
-                System.out.println("Handshake connection dismiss sent");
+                LOGGER.debug("Handshake connection dismiss sent");
                 this.socket.close();
-                System.out.println("Socket closed");
+                LOGGER.warn("Socket closed");
             }
 
 
         } catch (IOException e) {
             try {
-                System.out.println("no connection... retrying...");
+                LOGGER.info("no connection... retrying...");
                 Thread.sleep(1000);
             } catch (InterruptedException e1) {
                 e1.printStackTrace();
@@ -176,18 +180,15 @@ public class ACConnector implements Runnable {
             try {
                 //assetto corsa closes the connection if nothing happened!
 
-                System.out.println("Waiting for handshake response ...");
+                LOGGER.debug("Waiting for handshake response ...");
                 ACConnector.this.socket.receive(ACConnector.this.packet);
-                System.out.println("Handshake response received");
+                LOGGER.debug("Handshake response received");
                 ACConnector.this.readHandshakeResponse(ACConnector.this.buffer);
-//                Main.this.setChanged();
-//                Main.this.notifyObservers();
-                //TODO notify
                 connected = true;
-            } catch (SocketTimeoutException var2) {
-                System.err.println("Handshake response timeout");
-            } catch (IOException var3) {
-                var3.printStackTrace();
+            } catch (SocketTimeoutException timeout) {
+                LOGGER.error("Handshake response timeout");
+            } catch (IOException ioExp) {
+                LOGGER.error("error on handshake", ioExp);
             }
 
         }
@@ -202,20 +203,17 @@ public class ACConnector implements Runnable {
             while(true) {
                 try {
                     if(ACConnector.this.updating) {
-                        System.out.println("Waiting for data update ...");
+                        LOGGER.debug("Waiting for data update ...");
                         ACConnector.this.socket.receive(ACConnector.this.packet);
-                        System.out.println("Data update received");
+                        LOGGER.debug("Data update received");
                         ACConnector.this.readDataUpdate(ACConnector.this.buffer);
-//                        TelemetryData.this.setChanged();
-//                        TelemetryData.this.notifyObservers();
                         continue;
                     }
-                } catch (SocketTimeoutException var2) {
-                    System.err.println("Data update timeout");
-                } catch (IOException var3) {
-                    var3.printStackTrace();
+                } catch (SocketTimeoutException sout) {
+                    LOGGER.error("Data update timeout", sout);
+                } catch (IOException io) {
+                    LOGGER.error("Error receiving data", io);
                 }
-
                 return;
             }
         }
