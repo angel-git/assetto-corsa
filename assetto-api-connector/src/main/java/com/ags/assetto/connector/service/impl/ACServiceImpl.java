@@ -1,0 +1,37 @@
+package com.ags.assetto.connector.service.impl;
+
+import com.ags.assetto.connector.ACConnector;
+import com.ags.assetto.connector.service.ACService;
+
+import java.io.IOException;
+
+/**
+ * Created by Gavalda on 1/22/2015.
+ */
+@org.springframework.stereotype.Service
+public class ACServiceImpl implements ACService {
+
+
+    private ACConnector connector;
+
+    @Override
+    public void connect(final String ipAddress) {
+        try {
+            if (connector == null) {
+                connector = new ACConnector(ipAddress);
+                new Thread(connector).start();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public boolean isConnected() {
+        if (connector != null) {
+            return connector.isConnected();
+        } else {
+            return false;
+        }
+    }
+}

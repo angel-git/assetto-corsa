@@ -1,0 +1,14 @@
+<div th:fragment="content">
+    <h3>text from intro.html</h3>
+    <div ng-if="!connecting &amp;&amp; !connected">
+        <span ng-click="startConnection()" class="btn btn-default">Connect!</span>
+    </div>
+    <div ng-if="connecting">
+        <span>Connecting..... please start the race</span>
+    </div>
+    <div ng-if="connected">
+        <span>Connected!!!</span>
+
+
+    </div>
+</div>
