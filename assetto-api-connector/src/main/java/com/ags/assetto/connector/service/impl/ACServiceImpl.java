@@ -12,17 +12,25 @@ import java.io.IOException;
 public class ACServiceImpl implements ACService {
 
 
+    private Thread thread;
     private ACConnector connector;
 
     @Override
-    public void connect(final String ipAddress) {
-        try {
-            if (connector == null) {
-                connector = new ACConnector(ipAddress);
-                new Thread(connector).start();
+    public void prepareConnection(final String ipAddress) {
+            try {
+                if (thread == null) {
+                    connector = new ACConnector(ipAddress);
+                    thread = new Thread(connector);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+    }
+
+    @Override
+    public void connect() {
+        if (thread.getState().equals(Thread.State.NEW)) {
+            thread.start();
         }
     }
 

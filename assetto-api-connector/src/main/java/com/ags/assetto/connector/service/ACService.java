@@ -5,11 +5,13 @@ package com.ags.assetto.connector.service;
  */
 public interface ACService {
 
+
+    public void prepareConnection(String ipAddress);
+
     /**
      * opens the connection to AC game
-     * @param ipAddress
      */
-    public void connect(String ipAddress);
+    public void connect();
 
     /**
      * Checks if the race has started.

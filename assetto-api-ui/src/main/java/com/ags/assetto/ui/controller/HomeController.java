@@ -14,18 +14,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Layout("layouts/index")
 public class HomeController {
 
+    private static final String LOCALHOST_IP = "127.0.0.1";
     @Autowired
     private ACService acService;
 
     @RequestMapping("/")
     public String getIndexPage() {
+        acService.prepareConnection(LOCALHOST_IP);
         return "intro";
     }
 
 
     @RequestMapping("/start")
     public @ResponseBody String start() {
-        acService.connect("127.0.0.1");
+        acService.connect();
         return "";
     }
 
