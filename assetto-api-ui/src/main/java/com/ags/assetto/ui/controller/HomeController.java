@@ -1,6 +1,7 @@
 package com.ags.assetto.ui.controller;
 
 import com.ags.assetto.connector.service.ACService;
+import com.ags.assetto.connector.vo.AssettoCorsaSocketIntoVo;
 import com.ags.assetto.ui.thymeleaf.annotation.Layout;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,7 +38,10 @@ public class HomeController {
         return acService.isConnected();
     }
 
-
+    @RequestMapping("/data")
+    public @ResponseBody AssettoCorsaSocketIntoVo getAssettoData() {
+        return acService.getData();
+    }
 
 
 }

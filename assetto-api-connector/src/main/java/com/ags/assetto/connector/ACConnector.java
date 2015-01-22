@@ -2,6 +2,7 @@ package com.ags.assetto.connector;
 
 import com.ags.assetto.connector.utils.OperationEnum;
 import com.ags.assetto.connector.utils.ReaderUtils;
+import com.ags.assetto.connector.vo.AssettoCorsaSocketIntoVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,6 +32,8 @@ public class ACConnector implements Runnable {
     private String trackConfig;
     private boolean updating;
     private boolean connected;
+
+    private AssettoCorsaSocketIntoVo assettoInfo;
 
 
     public ACConnector(String host) throws IOException {
@@ -76,17 +79,17 @@ public class ACConnector implements Runnable {
             } else {
                 Updater var4 = new Updater();
                 var4.start();
-                LOGGER.debug("Handshake connection confirmation preparation ...");
+                LOGGER.trace("Handshake connection confirmation preparation ...");
                 this.sendHandshake(OperationEnum.SUBSCRIBE_UPDATE);
-                LOGGER.debug("Handshake connection confirmation sent");
+                LOGGER.trace("Handshake connection confirmation sent");
 
                 while(var4.isAlive()) {
                     Thread.sleep(1000L);
                 }
 
-                LOGGER.debug("Handshake connection dismiss preparation ...");
+                LOGGER.trace("Handshake connection dismiss preparation ...");
                 this.sendHandshake(OperationEnum.DISMISS);
-                LOGGER.debug("Handshake connection dismiss sent");
+                LOGGER.trace("Handshake connection dismiss sent");
                 this.socket.close();
                 LOGGER.warn("Socket closed");
             }
@@ -125,51 +128,60 @@ public class ACConnector implements Runnable {
         } else if(var3 != 328) {
             throw new RuntimeException("Bad \'size\' in data update: " + var3);
         } else {
-            float speed_Kmh = ReaderUtils.readFloat32(var1, 8);
-            float speed_Mph = ReaderUtils.readFloat32(var1, 12);
-            float speed_Ms = ReaderUtils.readFloat32(var1, 16);
-            boolean isAbsEnabled = ReaderUtils.readBoolean(var1[20]);
-            boolean isAbsInAction = ReaderUtils.readBoolean(var1[21]);
-            boolean isTcInAction = ReaderUtils.readBoolean(var1[22]);
-            boolean isTcEnabled = ReaderUtils.readBoolean(var1[23]);
-            boolean isInPit = ReaderUtils.readBoolean(var1[26]);
-            boolean isEngineLimiterOn = ReaderUtils.readBoolean(var1[27]);
-            float accG_vertical = ReaderUtils.readFloat32(var1, 28);
-            float accG_horizontal = ReaderUtils.readFloat32(var1, 32);
-            float accG_frontal = ReaderUtils.readFloat32(var1, 36);
-            int lapTime = ReaderUtils.readUInt32LE(var1, 40);
-            int lastLap = ReaderUtils.readUInt32LE(var1, 44);
-            int bestLap = ReaderUtils.readUInt32LE(var1, 48);
-            int lapCount = ReaderUtils.readUInt32LE(var1, 52);
-            float gas = ReaderUtils.readFloat32(var1, 56);
-            float brake = ReaderUtils.readFloat32(var1, 60);
-            float clutch = ReaderUtils.readFloat32(var1, 64);
-            float engineRPM = ReaderUtils.readFloat32(var1, 68);
-            float steer = ReaderUtils.readFloat32(var1, 72);
-            int gear = ReaderUtils.readUInt32LE(var1, 76);
-            float cgHeight = ReaderUtils.readFloat32(var1, 80);
-            float[] wheelAngularSpeed = ReaderUtils.read4Float32(var1, 84);
-            float[] slipAngle = ReaderUtils.read4Float32(var1, 100);
-            float[] slipAngle_ContactPatch = ReaderUtils.read4Float32(var1, 116);
-            float[] slipRatio = ReaderUtils.read4Float32(var1, 132);
-            float[] tyreSlip = ReaderUtils.read4Float32(var1, 148);
-            float[] ndSlip = ReaderUtils.read4Float32(var1, 164);
-            float[] load = ReaderUtils.read4Float32(var1, 180);
-            float[] Dy = ReaderUtils.read4Float32(var1, 196);
-            float[] Mz = ReaderUtils.read4Float32(var1, 212);
-            float[] tyreDirtyLevel = ReaderUtils.read4Float32(var1, 228);
-            float[] camberRAD = ReaderUtils.read4Float32(var1, 244);
-            float[] tyreRadius = ReaderUtils.read4Float32(var1, 260);
-            float[] tyreLoadedRadius = ReaderUtils.read4Float32(var1, 276);
-            float[] suspensionHeight = ReaderUtils.read4Float32(var1, 292);
-            float carPositionNormalized = ReaderUtils.readFloat32(var1, 308);
-            float carSlope = ReaderUtils.readFloat32(var1, 312);
-            float[] carCoordinates = ReaderUtils.read3Float32(var1, 316);
+            assettoInfo = new AssettoCorsaSocketIntoVo();
+
+
+
+            assettoInfo.setSpeed_Kmh(ReaderUtils.readFloat32(var1, 8));
+            assettoInfo.setSpeed_Mph(ReaderUtils.readFloat32(var1, 12));
+            assettoInfo.setSpeed_Ms(ReaderUtils.readFloat32(var1, 16));
+            assettoInfo.setAbsEnabled(ReaderUtils.readBoolean(var1[20]));
+            assettoInfo.setAbsInAction(ReaderUtils.readBoolean(var1[21]));
+            assettoInfo.setTcInAction(ReaderUtils.readBoolean(var1[22]));
+            assettoInfo.setTcEnabled(ReaderUtils.readBoolean(var1[23]));
+            assettoInfo.setInPit(ReaderUtils.readBoolean(var1[26]));
+            assettoInfo.setEngineLimiterOn(ReaderUtils.readBoolean(var1[27]));
+            assettoInfo.setAccG_vertical(ReaderUtils.readFloat32(var1, 28));
+            assettoInfo.setAccG_horizontal(ReaderUtils.readFloat32(var1, 32));
+            assettoInfo.setAccG_frontal(ReaderUtils.readFloat32(var1, 36));
+            assettoInfo.setLapTime(ReaderUtils.readUInt32LE(var1, 40));
+            assettoInfo.setLastLap(ReaderUtils.readUInt32LE(var1, 44));
+            assettoInfo.setBestLap(ReaderUtils.readUInt32LE(var1, 48));
+            assettoInfo.setLapCount(ReaderUtils.readUInt32LE(var1, 52));
+            assettoInfo.setGas(ReaderUtils.readFloat32(var1, 56));
+            assettoInfo.setBrake(ReaderUtils.readFloat32(var1, 60));
+            assettoInfo.setClutch(ReaderUtils.readFloat32(var1, 64));
+            assettoInfo.setEngineRPM(ReaderUtils.readFloat32(var1, 68));
+            assettoInfo.setSteer(ReaderUtils.readFloat32(var1, 72));
+            assettoInfo.setGear(ReaderUtils.readUInt32LE(var1, 76));
+            assettoInfo.setCgHeight(ReaderUtils.readFloat32(var1, 80));
+            assettoInfo.setWheelAngularSpeed(ReaderUtils.read4Float32(var1, 84));
+            assettoInfo.setSlipAngle(ReaderUtils.read4Float32(var1, 100));
+            assettoInfo.setSlipAngle_ContactPatch(ReaderUtils.read4Float32(var1, 116));
+            assettoInfo.setSlipRatio(ReaderUtils.read4Float32(var1, 132));
+            assettoInfo.setTyreSlip(ReaderUtils.read4Float32(var1, 148));
+            assettoInfo.setNdSlip(ReaderUtils.read4Float32(var1, 164));
+            assettoInfo.setLoad(ReaderUtils.read4Float32(var1, 180));
+            assettoInfo.setDy(ReaderUtils.read4Float32(var1, 196));
+            assettoInfo.setMz(ReaderUtils.read4Float32(var1, 212));
+            assettoInfo.setTyreDirtyLevel(ReaderUtils.read4Float32(var1, 228));
+            assettoInfo.setCamberRAD(ReaderUtils.read4Float32(var1, 244));
+            assettoInfo.setTyreRadius(ReaderUtils.read4Float32(var1, 260));
+            assettoInfo.setTyreLoadedRadius(ReaderUtils.read4Float32(var1, 276));
+            assettoInfo.setSuspensionHeight(ReaderUtils.read4Float32(var1, 292));
+            assettoInfo.setCarPositionNormalized(ReaderUtils.readFloat32(var1, 308));
+            assettoInfo.setCarSlope(ReaderUtils.readFloat32(var1, 312));
+            assettoInfo.setCarCoordinates(ReaderUtils.read3Float32(var1, 316));
+
         }
     }
 
     public boolean isConnected() {
         return connected;
+    }
+
+    public AssettoCorsaSocketIntoVo getData() {
+        return assettoInfo;
     }
 
     private class HandshakeHandler extends Thread {
@@ -211,8 +223,10 @@ public class ACConnector implements Runnable {
                     }
                 } catch (SocketTimeoutException sout) {
                     LOGGER.error("Data update timeout", sout);
+                    connected = false;
                 } catch (IOException io) {
                     LOGGER.error("Error receiving data", io);
+                    connected = false;
                 }
                 return;
             }

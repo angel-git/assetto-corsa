@@ -1,7 +1,10 @@
 AppController = ($scope, $http, $interval) ->
 
   $scope.connected = false
+
+#  schedulers
   checkInterval = null
+  infoInterval = null
 
   $scope.startConnection = ->
     request = $http.get '/start'
@@ -17,11 +20,20 @@ AppController = ($scope, $http, $interval) ->
       if ($scope.connected)
         $scope.connecting = false
         $interval.cancel checkInterval
-        #TODO start showing info
+
+        infoInterval = $interval(getACData, 1000);
     request.error () =>
       $scope.connectionError = true
       $interval.cancel checkInterval
 
+
+  getACData = () =>
+    request = $http.get '/data'
+    request.then (result) =>
+      $scope.data = result.data
+    request.error () =>
+      $scope.connectionError = true
+      $interval.cancel infoInterval
 
 
 angular.module("myApp", [])

@@ -2,6 +2,7 @@ package com.ags.assetto.connector.service.impl;
 
 import com.ags.assetto.connector.ACConnector;
 import com.ags.assetto.connector.service.ACService;
+import com.ags.assetto.connector.vo.AssettoCorsaSocketIntoVo;
 
 import java.io.IOException;
 
@@ -41,5 +42,10 @@ public class ACServiceImpl implements ACService {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public AssettoCorsaSocketIntoVo getData() {
+        return connector.getData();
     }
 }

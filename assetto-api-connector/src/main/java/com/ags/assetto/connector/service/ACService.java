@@ -1,11 +1,17 @@
 package com.ags.assetto.connector.service;
 
+import com.ags.assetto.connector.vo.AssettoCorsaSocketIntoVo;
+
 /**
  * Created by Gavalda on 1/22/2015.
  */
 public interface ACService {
 
 
+    /**
+     * prepares the objects
+     * @param ipAddress
+     */
     public void prepareConnection(String ipAddress);
 
     /**
@@ -19,4 +25,13 @@ public interface ACService {
      * @return
      */
     public boolean isConnected();
+
+
+    /**
+     * gets the assetto information from the socket
+     * @return
+     */
+    public AssettoCorsaSocketIntoVo getData();
+
+
 }

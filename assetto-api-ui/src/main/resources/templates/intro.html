@@ -1,5 +1,5 @@
 <div th:fragment="content">
-    <h3>text from intro.html</h3>
+    <h4>text from intro.html</h4>
 
     <!--info messages-->
     <div ng-if="!connecting &amp;&amp; !connected">
@@ -18,5 +18,8 @@
     <!--main content-->
     <div ng-if="connected">
         <span>Connected!!!</span>
+
+        <h2>GAS</h2>
+        <span>{{data.gas}}</span>
     </div>
 </div>
