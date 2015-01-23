@@ -29,3 +29,12 @@ go to ``http://localhost:8080``
 - if accessed from phone the lock screen will kick at any time, create application instead??
 
 
+## Changelog
+
+### alpha 0.1
+
+- speed (km/h)
+- gear
+- rpm
+[first test video](https://www.youtube.com/watch?v=-9wygRN348g)
+
