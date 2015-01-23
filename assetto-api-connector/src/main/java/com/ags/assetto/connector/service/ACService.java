@@ -34,4 +34,12 @@ public interface ACService {
     public AssettoCorsaSocketIntoVo getData();
 
 
+    /**
+     * disconnects and clear the threads
+     */
+    public void disconnect();
+
+
+
+
 }

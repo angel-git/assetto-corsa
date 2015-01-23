@@ -2,6 +2,8 @@ AppController = ($scope, $http, $interval) ->
 
   $scope.connected = false
 
+  initData($scope)
+
 #  schedulers
   checkInterval = null
   infoInterval = null
@@ -39,3 +41,8 @@ AppController = ($scope, $http, $interval) ->
 angular.module("myApp", [])
   .controller("myAppController", AppController)
 
+initData = ($scope) =>
+  $scope.data = {}
+  $scope.data.speed_Kmh = 0
+  $scope.data.gear = 0
+  $scope.data.engineRPM = 0

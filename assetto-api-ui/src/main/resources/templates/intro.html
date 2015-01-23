@@ -1,5 +1,5 @@
 <div th:fragment="content">
-    <h4>text from intro.html</h4>
+    <!--<h4>text from intro.html</h4>-->
 
     <!--info messages-->
     <div ng-if="!connecting &amp;&amp; !connected">
@@ -17,9 +17,25 @@
 
     <!--main content-->
     <div ng-if="connected">
-        <span>Connected!!!</span>
+        <!--<span>Connected!!!</span>-->
 
-        <h2>GAS</h2>
-        <span>{{data.gas}}</span>
     </div>
+
+    <div class="dashboard-container">
+        <div class="speed-container">
+            <div class="title">speed</div>
+            <div class="info-big">{{data.speed_Kmh}} km/h</div>
+        </div>
+        <div class="gear-container">
+            <div class="title">gear</div>
+            <div class="info-big">{{data.gear}}</div>
+        </div>
+        <div class="rpm-container">
+            <div class="title">rpm</div>
+            <div class="info-big">{{data.engineRPM}}</div>
+        </div>
+        <div style="clear: both"></div>
+    </div>
+
+
 </div>

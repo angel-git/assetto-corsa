@@ -184,6 +184,10 @@ public class ACConnector implements Runnable {
         return assettoInfo;
     }
 
+    public void disconnect() {
+        this.updating = false;
+    }
+
     private class HandshakeHandler extends Thread {
         private HandshakeHandler() {
         }
