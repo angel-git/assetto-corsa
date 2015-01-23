@@ -36,5 +36,6 @@ go to ``http://localhost:8080``
 - speed (km/h)
 - gear
 - rpm
-- [first test video](https://www.youtube.com/watch?v=-9wygRN348g)
+
+See [first test video](https://www.youtube.com/watch?v=-9wygRN348g)
 
