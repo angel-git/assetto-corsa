@@ -92,8 +92,8 @@ public class AssettoCorsaSocketIntoVo {
     private float[] carCoordinates;
 
 
-    public float getSpeed_Kmh() {
-        return speed_Kmh;
+    public int getSpeed_Kmh() {
+        return (int)speed_Kmh;
     }
 
     public void setSpeed_Kmh(float speed_Kmh) {
@@ -244,8 +244,8 @@ public class AssettoCorsaSocketIntoVo {
         this.clutch = clutch;
     }
 
-    public float getEngineRPM() {
-        return engineRPM;
+    public int getEngineRPM() {
+        return (int)engineRPM;
     }
 
     public void setEngineRPM(float engineRPM) {
