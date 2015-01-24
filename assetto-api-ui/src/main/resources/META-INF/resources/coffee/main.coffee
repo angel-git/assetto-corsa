@@ -46,3 +46,6 @@ initData = ($scope) =>
   $scope.data.speed_Kmh = 0
   $scope.data.gear = 0
   $scope.data.engineRPM = 0
+  $scope.data.lapTime = 0
+  $scope.data.lastLap = 0
+  $scope.data.bestLap = 0
