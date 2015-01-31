@@ -39,3 +39,8 @@ go to ``http://localhost:8080``
 
 See [first test video](https://www.youtube.com/watch?v=-9wygRN348g)
 
+### alpha 0.2
+
+- last lap
+- best lap
+- position

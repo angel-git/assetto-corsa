@@ -37,15 +37,35 @@ AppController = ($scope, $http, $interval) ->
       $scope.connectionError = true
       $interval.cancel infoInterval
 
+LapFormatter = ->
+  (lapMs) ->
+    #"00:00.000"
+    milliseconds = lapMs % 1000;
+    if milliseconds < 10
+      milliseconds = "00#{milliseconds}"
+    else if milliseconds < 100
+      milliseconds = "0#{milliseconds}"
 
-angular.module("myApp", [])
-  .controller("myAppController", AppController)
+    seconds = Math.floor((lapMs / 1000) % 60);
+    if seconds < 10
+      seconds = "0#{seconds}"
+    minutes = Math.floor((lapMs / (60 * 1000)) % 60);
+    if minutes < 10
+      minutes = "0#{minutes}"
+
+    minutes + ":" + seconds + "." + milliseconds;
+
+
+app = angular.module("myApp", [])
+app.controller "myAppController", AppController
+app.filter "lapFormatter", LapFormatter
 
 initData = ($scope) =>
   $scope.data = {}
   $scope.data.speed_Kmh = 0
   $scope.data.gear = 0
   $scope.data.engineRPM = 0
-  $scope.data.lapTime = 0
   $scope.data.lastLap = 0
   $scope.data.bestLap = 0
+  $scope.data.lapCount = 0
+  $scope.data.position = 0

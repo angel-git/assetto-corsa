@@ -21,36 +21,35 @@
 
     </div>
 
-    <div class="dashboard-container">
-        <div class="speed-container">
-            <div class="title">speed</div>
-            <div class="info-big">{{data.speed_Kmh}} km/h</div>
-        </div>
-        <div class="gear-container">
-            <div class="title">gear</div>
-            <div class="info-big">{{data.gear}}</div>
-        </div>
-        <div class="rpm-container">
-            <div class="title">rpm</div>
-            <div class="info-big">{{data.engineRPM}}</div>
-        </div>
 
-        <div class="laps-container">
-            <div class="lap-containter">
-                <div class="title">lap</div>
-                <div class="info-med">{{data.lapTime}}</div>
-            </div>
-            <div class="lap-containter">
-                <div class="title">last lap</div>
-                <div class="info-med">{{data.lastLap}}</div>
-            </div>
-            <div class="lap-containter">
-                <div class="title">best lap</div>
-                <div class="info-med">{{data.bestLap}}</div>
-            </div>
-        </div>
-        <div style="clear: both"></div>
-    </div>
+    <table class="dashboard-container">
+        <tbody>
+            <tr>
+                <td colspan="2" class="title">speed</td>
+                <td colspan="3" class="title">last lap</td>
+            </tr>
+            <tr>
+                <td colspan="2" class="info-big">{{data.speed_Kmh}} km/h</td>
+                <td colspan="3" class="info-med">{{data.lastLap | lapFormatter}}</td>
+            </tr>
+            <tr>
+                <td class="title">gear</td>
+                <td class="title">rpm</td>
+                <td colspan="3" class="title">best lap</td>
+            </tr>
+            <tr>
+                <td class="info-big">{{data.gear}}</td>
+                <td class="info-big">{{data.engineRPM}}</td>
+                <td colspan="3" class="info-med">{{data.bestLap | lapFormatter}}</td>
+            </tr>
+            <tr>
+                <td class="title">position</td>
+            </tr>
+            <tr>
+                <td class="info-big">{{data.position}}</td>
+            </tr>
+        </tbody>
+    </table>
 
 
 </div>
